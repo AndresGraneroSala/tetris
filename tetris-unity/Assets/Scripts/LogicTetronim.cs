@@ -15,6 +15,9 @@ public class LogicTetronim : MonoBehaviour
 
     private static Transform[,] grid = new Transform[widthGrid,heightGrid];
     
+    
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -58,11 +61,13 @@ public class LogicTetronim : MonoBehaviour
                 transform.position -= new Vector3(0, -1, 0);
                 
                 AddToGrid();
-                
+                ReviewLines();
                 this.enabled = false;
                 
                 FindObjectOfType<LogicSpawner>().NewTetronim();
             }
+            
+            
 
             timeBefore = Time.time;
 
@@ -114,7 +119,67 @@ public class LogicTetronim : MonoBehaviour
 
             grid[X, Y] = child;
 
+            if (Y >= 16)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+
+        }
+    }
+
+
+    void ReviewLines()
+    {
+        for (int i = heightGrid - 1; i >= 0; i--)
+        {
+            if (HaveLine(i))
+            {
+                DeleteLine(i);
+                DownLine(i);
+            }
+        }
+    }
+
+
+
+
+
+    private bool HaveLine(int i)
+    {
+        for (int j = 0; j < widthGrid; j++)
+        {
+            if (grid[j, i] == null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    
+    private void DeleteLine(int i)
+    {
+        for (int j = 0; j < widthGrid; j++)
+        {
+            Destroy(grid[j,i].gameObject);
+            grid[j, i] = null;
         }
     }
     
+    private void DownLine(int i)
+    {
+        for (int y = i; y < heightGrid; y++)
+        {
+            for (int j = 0; j < widthGrid; j++)
+            {
+                if (grid[j, y] != null)
+                {
+                    grid[j, y - 1] = grid[j, y];
+                    grid[j, y]= null;
+                    grid[j, y-1].transform.position-= new Vector3(0,1,0);
+                }
+            }
+        }
+    }
 }
