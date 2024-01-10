@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LogicTetronim : MonoBehaviour
 {
@@ -9,19 +10,21 @@ public class LogicTetronim : MonoBehaviour
     [SerializeField] private float timeBefore, 
         timeDown = 0.8f;
 
-    public static int heightGrid = 18, widthGrid=10;
+    public static int heightGrid = 20, widthGrid=10;
 
     [SerializeField] private Vector3 rotationPoint;
 
     private static Transform[,] grid = new Transform[widthGrid,heightGrid];
-    
-    
+
+    public static int score=0;
+    public static int level=0;
     
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        UpLevel();
+        UpDifficult();
     }
 
     // Update is called once per frame
@@ -52,7 +55,7 @@ public class LogicTetronim : MonoBehaviour
           cada segundo baja
           
         */
-        if (Time.time - timeBefore > (Input.GetKey(KeyCode.DownArrow)? timeDown/18 : timeDown))
+        if (Time.time - timeBefore > (Input.GetKey(KeyCode.DownArrow)? timeDown/20 : timeDown))
         {
             transform.position += new Vector3(0, -1, 0);
             
@@ -62,6 +65,9 @@ public class LogicTetronim : MonoBehaviour
                 
                 AddToGrid();
                 ReviewLines();
+                
+
+                
                 this.enabled = false;
                 
                 FindObjectOfType<LogicSpawner>().NewTetronim();
@@ -84,6 +90,8 @@ public class LogicTetronim : MonoBehaviour
             }
             
         }
+        
+
     }
 
     bool Limits()
@@ -119,8 +127,12 @@ public class LogicTetronim : MonoBehaviour
 
             grid[X, Y] = child;
 
-            if (Y >= 16)
+            if (Y >= 19)
             {
+                score = 0;
+                level = 0;
+                timeDown = 0.8f;
+                
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
 
@@ -134,6 +146,9 @@ public class LogicTetronim : MonoBehaviour
         {
             if (HaveLine(i))
             {
+                UpLevel();
+                UpDifficult();
+                
                 DeleteLine(i);
                 DownLine(i);
             }
@@ -154,6 +169,9 @@ public class LogicTetronim : MonoBehaviour
             }
         }
 
+        score += 100;
+        Debug.Log(score);
+        
         return true;
     }
     
@@ -181,5 +199,37 @@ public class LogicTetronim : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    void UpLevel()
+    {
+        switch (score)
+        {
+            case 200: level = 1;
+                break;
+            
+            case 400: level = 4;
+                break;
+            
+           
+        }
+
+        GameObject.Find("ScoreNum").GetComponent<Text>().text = score.ToString();
+
+    }
+
+    void UpDifficult()
+    {
+        switch (level)
+        {
+            case 1: timeDown = 0.4f;
+                break;
+            case 2: timeDown = 0.2f;
+                break;
+        }
+        
+        GameObject.Find("LevelNum").GetComponent<Text>().text = level.ToString();
+
     }
 }
