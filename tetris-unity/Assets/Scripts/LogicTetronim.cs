@@ -8,7 +8,7 @@ public class LogicTetronim : MonoBehaviour
 {
 
     [SerializeField] private float timeBefore, 
-        timeDown = 0.8f;
+        timeDown = 50.8f;
 
     public static int heightGrid = 20, widthGrid=10;
 
@@ -84,9 +84,21 @@ public class LogicTetronim : MonoBehaviour
         {
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
 
+            foreach (Transform child in transform)
+            {
+                child.Rotate(new Vector3(0,0,90));
+
+            }
+            
             if (!Limits())
             {
                 transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
+                
+                foreach (Transform child in transform)
+                {
+                    child.Rotate(new Vector3(0,0,-90));
+
+                }
             }
             
         }
