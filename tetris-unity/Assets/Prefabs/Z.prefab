@@ -135,6 +135,7 @@ MonoBehaviour:
   timeBefore: 0
   timeDown: 0.8
   rotationPoint: {x: 0, y: 0, z: 0}
+  name: Z
 --- !u!1 &6732971736652709741
 GameObject:
   m_ObjectHideFlags: 0

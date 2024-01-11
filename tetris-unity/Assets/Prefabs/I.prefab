@@ -387,3 +387,4 @@ MonoBehaviour:
   timeBefore: 0
   timeDown: 0.8
   rotationPoint: {x: -0.5, y: 0.5, z: 0}
+  name: I

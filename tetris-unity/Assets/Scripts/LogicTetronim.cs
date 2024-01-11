@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LogicTetronim : MonoBehaviour
@@ -12,13 +13,14 @@ public class LogicTetronim : MonoBehaviour
 
     public static int heightGrid = 20, widthGrid=10;
 
-    [SerializeField] private Vector3 rotationPoint;
+    public Vector3 rotationPoint;
 
     private static Transform[,] grid = new Transform[widthGrid,heightGrid];
 
     public static int score=0;
     public static int level=0;
-    
+
+    [FormerlySerializedAs("name")] public string nameTetronim;
     
     // Start is called before the first frame update
     void Start()
@@ -86,7 +88,7 @@ public class LogicTetronim : MonoBehaviour
 
             foreach (Transform child in transform)
             {
-                child.Rotate(new Vector3(0,0,90));
+                child.localRotation = Quaternion.Euler(0, 0, -transform.eulerAngles.z);
 
             }
             
@@ -96,7 +98,7 @@ public class LogicTetronim : MonoBehaviour
                 
                 foreach (Transform child in transform)
                 {
-                    child.Rotate(new Vector3(0,0,-90));
+                    child.localRotation = Quaternion.Euler(0, 0, -transform.eulerAngles.z);
 
                 }
             }
@@ -111,6 +113,11 @@ public class LogicTetronim : MonoBehaviour
             }
             transform.position -= new Vector3(0, -1, 0);
 
+            AddToGrid();
+            ReviewLines();
+            FindObjectOfType<LogicSpawner>().NewTetronim();
+            this.enabled = false;
+            
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -152,7 +159,6 @@ public class LogicTetronim : MonoBehaviour
             int X = Mathf.RoundToInt(child.transform.position.x);
             int Y = Mathf.RoundToInt(child.transform.position.y);
 
-            grid[X, Y] = child;
 
             if (Y >= 19)
             {
@@ -161,7 +167,10 @@ public class LogicTetronim : MonoBehaviour
                 timeDown = 0.8f;
                 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                
+                return;
             }
+            grid[X, Y] = child;
 
         }
     }

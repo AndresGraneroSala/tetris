@@ -36,22 +36,85 @@ public class LogicSpawner : MonoBehaviour
 
         if (tetronimHolded != null)
         {
+            tetronimHolded.transform.eulerAngles = new Vector3(0,0,0);
+            
             tetronimHolded.transform.position = transform.position;
             tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
 
-            tetronim.GetComponent<LogicTetronim>().enabled = false;
-            tetronim.transform.position = parentHold.position;
-            tetronimHolded = tetronim;
+            foreach (Transform child in tetronim.transform)
+            {
+                child.localRotation = Quaternion.Euler(0,0,-tetronim.transform.eulerAngles.z);
+
+            }
+            
+            
+            SetInBoxHoldTetronim(tetronim);
+
             canHoldTettronim = false;
         }
         else
         {
-            tetronim.GetComponent<LogicTetronim>().enabled = false;
-            tetronim.transform.position = parentHold.position;
-            tetronimHolded = tetronim;
+            SetInBoxHoldTetronim(tetronim);
+            
+            //TODO: rotate 
+            
 
             NewTetronim();
         }
+    }
+
+    void SetInBoxHoldTetronim(GameObject tetronim)
+    {
+        tetronim.GetComponent<LogicTetronim>().enabled = false;
+        tetronimHolded = tetronim;
+
+        float eulerAnglesZ = tetronim.transform.eulerAngles.z;
+
+        Vector3 addToCenterPosition= Vector3.zero;
+        
+        switch (tetronim.GetComponent<LogicTetronim>().nameTetronim)
+        {
+            case "I":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ+90); 
+                addToCenterPosition += new Vector3(0.5f,0,0);
+                break;
+            case "J":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ-90); 
+                addToCenterPosition += new Vector3(-1,-0.5f,0);
+                break;
+            case "L":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ+90); 
+                addToCenterPosition += new Vector3(1,-0.5f,0);
+
+                break;
+            case "O":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ+90); 
+                addToCenterPosition += new Vector3(0.5f,-0.5f,0);
+                break;
+            case "S":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ); 
+                addToCenterPosition += new Vector3(0,-0.5f,0);
+                break;
+            case "T":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ); 
+                addToCenterPosition += new Vector3(0,-0.5f,0);
+                break;
+            case "Z":
+                tetronim.transform.RotateAround(tetronim.transform.TransformPoint(tetronim.GetComponent<LogicTetronim>().rotationPoint),new Vector3(0,0,1),-eulerAnglesZ); 
+                addToCenterPosition += new Vector3(0,-0.5f,0);
+                break;
+
+        }
+
+        tetronim.transform.position = parentHold.position+ addToCenterPosition;
+        
+        
+        foreach (Transform child in tetronim.transform)
+        {
+            child.localRotation = Quaternion.Euler(0,0,-tetronim.transform.eulerAngles.z);
+
+        }
+
     }
 
 
