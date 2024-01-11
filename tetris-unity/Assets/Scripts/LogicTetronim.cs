@@ -100,6 +100,11 @@ public class LogicTetronim : MonoBehaviour
             transform.position -= new Vector3(0, -1, 0);
 
         }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            FindObjectOfType<LogicSpawner>().HoldTetronim(gameObject);
+        }
         
 
     }
