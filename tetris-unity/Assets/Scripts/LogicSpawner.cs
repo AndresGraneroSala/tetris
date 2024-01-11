@@ -41,29 +41,25 @@ public class LogicSpawner : MonoBehaviour
             tetronimHolded.transform.position = transform.position;
             tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
 
-            foreach (Transform child in tetronim.transform)
-            {
-                child.localRotation = Quaternion.Euler(0,0,-tetronim.transform.eulerAngles.z);
-
-            }
             
+            tetronim.GetComponent<LogicTetronim>().UpdateRotationChilds();
             
-            SetInBoxHoldTetronim(tetronim);
+            SetInBoxHoldTetronim(tetronim,parentHold);
 
             canHoldTettronim = false;
         }
         else
         {
-            SetInBoxHoldTetronim(tetronim);
+            SetInBoxHoldTetronim(tetronim,parentHold);
             
-            //TODO: rotate 
+            
             
 
             NewTetronim();
         }
     }
 
-    void SetInBoxHoldTetronim(GameObject tetronim)
+    void SetInBoxHoldTetronim(GameObject tetronim,Transform box)
     {
         tetronim.GetComponent<LogicTetronim>().enabled = false;
         tetronimHolded = tetronim;
@@ -106,14 +102,10 @@ public class LogicSpawner : MonoBehaviour
 
         }
 
-        tetronim.transform.position = parentHold.position+ addToCenterPosition;
+        tetronim.transform.position = box.position+ addToCenterPosition;
         
+        tetronim.GetComponent<LogicTetronim>().UpdateRotationChilds();
         
-        foreach (Transform child in tetronim.transform)
-        {
-            child.localRotation = Quaternion.Euler(0,0,-tetronim.transform.eulerAngles.z);
-
-        }
 
     }
 

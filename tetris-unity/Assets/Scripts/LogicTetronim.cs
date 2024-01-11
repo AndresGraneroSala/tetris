@@ -86,11 +86,7 @@ public class LogicTetronim : MonoBehaviour
         {
             transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
 
-            foreach (Transform child in transform)
-            {
-                child.localRotation = Quaternion.Euler(0, 0, -transform.eulerAngles.z);
-
-            }
+            UpdateRotationChilds();
             
             if (!Limits())
             {
@@ -126,6 +122,15 @@ public class LogicTetronim : MonoBehaviour
         }
         
 
+    }
+
+    public void UpdateRotationChilds()
+    {
+        foreach (Transform child in transform)
+        {
+            child.localRotation = Quaternion.Euler(0, 0, -transform.eulerAngles.z);
+
+        }
     }
 
     bool Limits()
