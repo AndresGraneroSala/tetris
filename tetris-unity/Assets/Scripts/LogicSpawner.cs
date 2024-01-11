@@ -10,48 +10,85 @@ public class LogicSpawner : MonoBehaviour
     public GameObject[] tetronims;
 
     public Transform parentHold;
-    private bool canHoldTettronim;
+    private bool _canHoldTettronim;
 
-    private GameObject tetronimHolded;
+    private GameObject _tetronimHolded;
+
+    [SerializeField] private Transform[] boxNext;
+    private GameObject[] tetronimNext;
     
     // Start is called before the first frame update
     void Start()
     {
+
+        tetronimNext = new GameObject[boxNext.Length];
+
+        for (int i = 0; i < tetronimNext.Length; i++)
+        {
+            GameObject tetronim = GenerateTetronim();
+            tetronimNext[i] = tetronim;
+            SetInBoxHoldTetronim(tetronim, boxNext[i]);
+        }
+        
         NewTetronim();
+
     }
 
-    public void NewTetronim()
+    GameObject GenerateTetronim()
     {
         GameObject tetronim= Instantiate(tetronims[Random.Range(0, tetronims.Length)]);
-        tetronim.transform.position = transform.position;
-        canHoldTettronim = true;
+        tetronim.GetComponent<LogicTetronim>().enabled = false;
+
+        return tetronim;
+    }
+    
+    public void NewTetronim()
+    {
+        GameObject tetronim = GenerateTetronim();
+        tetronimNext[0].transform.position = transform.position;
+        tetronimNext[0].GetComponent<LogicTetronim>().enabled = true;
+        
+        for (int i = 1; i < tetronimNext.Length; i++)
+        {
+            tetronimNext[i - 1] = tetronimNext[i];
+        }
+        tetronimNext[tetronimNext.Length - 1] = tetronim;
+
+        for (int i = 0; i < tetronimNext.Length; i++)
+        {
+            SetInBoxHoldTetronim(tetronimNext[i],boxNext[i]);
+        }
+        
+        
+        _canHoldTettronim = true;
     }
 
     public void HoldTetronim(GameObject tetronim)
     {
-        if (!canHoldTettronim)
+        if (!_canHoldTettronim)
         {
             return;
         }
 
-        if (tetronimHolded != null)
+        if (_tetronimHolded != null)
         {
-            tetronimHolded.transform.eulerAngles = new Vector3(0,0,0);
+            _tetronimHolded.transform.eulerAngles = new Vector3(0,0,0);
             
-            tetronimHolded.transform.position = transform.position;
-            tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
+            _tetronimHolded.transform.position = transform.position;
+            _tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
 
             
             tetronim.GetComponent<LogicTetronim>().UpdateRotationChilds();
             
             SetInBoxHoldTetronim(tetronim,parentHold);
-
-            canHoldTettronim = false;
+            _tetronimHolded = tetronim;
+            
+            _canHoldTettronim = false;
         }
         else
         {
             SetInBoxHoldTetronim(tetronim,parentHold);
-            
+            _tetronimHolded = tetronim;
             
             
 
@@ -62,7 +99,7 @@ public class LogicSpawner : MonoBehaviour
     void SetInBoxHoldTetronim(GameObject tetronim,Transform box)
     {
         tetronim.GetComponent<LogicTetronim>().enabled = false;
-        tetronimHolded = tetronim;
+        
 
         float eulerAnglesZ = tetronim.transform.eulerAngles.z;
 
