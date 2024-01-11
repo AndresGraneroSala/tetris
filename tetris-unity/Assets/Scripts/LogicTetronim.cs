@@ -90,6 +90,16 @@ public class LogicTetronim : MonoBehaviour
             }
             
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            while (Limits())
+            {
+                transform.position += new Vector3(0, -1, 0);
+            }
+            transform.position -= new Vector3(0, -1, 0);
+
+        }
         
 
     }
