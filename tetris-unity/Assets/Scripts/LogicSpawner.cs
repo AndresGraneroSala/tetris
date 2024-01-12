@@ -80,6 +80,7 @@ public class LogicSpawner : MonoBehaviour
             _tetronimHolded.transform.position = transform.position;
             _tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
             _tetronimHolded.GetComponent<LogicTetronim>().SetGhostInGrid();
+            _tetronimHolded.GetComponent<LogicTetronim>().UpdateRotationChilds();
 
             
             tetronim.GetComponent<LogicTetronim>().UpdateRotationChilds();
