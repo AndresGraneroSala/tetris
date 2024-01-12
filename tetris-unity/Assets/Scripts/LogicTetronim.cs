@@ -21,12 +21,16 @@ public class LogicTetronim : MonoBehaviour
     public static int level=0;
 
     [FormerlySerializedAs("name")] public string nameTetronim;
+
+    [SerializeField] private Sprite spriteGhostPiece;
+    [SerializeField] static GameObject ghostPiece;
     
     // Start is called before the first frame update
     void Start()
     {
         UpLevel();
         UpDifficult();
+        SetGhostInGrid();
     }
 
     // Update is called once per frame
@@ -64,14 +68,14 @@ public class LogicTetronim : MonoBehaviour
             if (!Limits())
             {
                 transform.position -= new Vector3(0, -1, 0);
-                
+                TryDestroyGhost();
+
                 AddToGrid();
                 ReviewLines();
-                
+
 
                 
                 this.enabled = false;
-                
                 FindObjectOfType<LogicSpawner>().NewTetronim();
             }
             
@@ -103,6 +107,9 @@ public class LogicTetronim : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            TryDestroyGhost();
+
+            
             while (Limits())
             {
                 transform.position += new Vector3(0, -1, 0);
@@ -112,6 +119,9 @@ public class LogicTetronim : MonoBehaviour
             AddToGrid();
             ReviewLines();
             FindObjectOfType<LogicSpawner>().NewTetronim();
+            
+
+            
             this.enabled = false;
             
         }
@@ -120,7 +130,11 @@ public class LogicTetronim : MonoBehaviour
         {
             FindObjectOfType<LogicSpawner>().HoldTetronim(gameObject);
         }
-        
+
+        if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.DownArrow)&& !Input.GetKeyDown(KeyCode.C) )
+        {
+            SetGhostInGrid();
+        }
 
     }
 
@@ -133,7 +147,7 @@ public class LogicTetronim : MonoBehaviour
         }
     }
 
-    bool Limits()
+    public bool Limits()
     {
         foreach (Transform child in transform)
         {
@@ -273,4 +287,37 @@ public class LogicTetronim : MonoBehaviour
         GameObject.Find("LevelNum").GetComponent<Text>().text = level.ToString();
 
     }
+
+    public void TryDestroyGhost()
+    {
+        if (ghostPiece != null)
+        {
+            Destroy(ghostPiece);
+        }
+
+    }
+    
+    public void SetGhostInGrid()
+    {
+    
+        print("set ghost");
+        
+        TryDestroyGhost();
+
+        ghostPiece = Instantiate(gameObject);
+        ghostPiece.GetComponent<LogicTetronim>().enabled = false;
+        
+        while (ghostPiece.GetComponent<LogicTetronim>().Limits())
+        {
+            ghostPiece.transform.position += new Vector3(0, -1, 0);
+        }
+        ghostPiece.transform.position -= new Vector3(0, -1, 0);
+
+        foreach (Transform child in ghostPiece.transform)
+        {
+            child.GetComponent<SpriteRenderer>().sprite = spriteGhostPiece;
+        }
+        
+    }
+    
 }

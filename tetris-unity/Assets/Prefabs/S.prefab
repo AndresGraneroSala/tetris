@@ -219,7 +219,9 @@ MonoBehaviour:
   timeBefore: 0
   timeDown: 0.8
   rotationPoint: {x: 0, y: 0, z: 0}
-  name: S
+  nameTetronim: S
+  spriteGhostPiece: {fileID: 21300000, guid: 9d99b0f0c86794842bca0bbaa4cd3544, type: 3}
+  ghostPiece: {fileID: 0}
 --- !u!1 &5471831753942105837
 GameObject:
   m_ObjectHideFlags: 0

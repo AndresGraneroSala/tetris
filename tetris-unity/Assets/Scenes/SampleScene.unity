@@ -628,6 +628,10 @@ MonoBehaviour:
   - {fileID: 3208033345087314378, guid: a5a3a758c6239cd43b27d49d9d9ca538, type: 3}
   - {fileID: 6711768519531765173, guid: 1d7b75ef9a1fb5941920c06bafc5d375, type: 3}
   parentHold: {fileID: 282273080}
+  boxNext:
+  - {fileID: 1012492299}
+  - {fileID: 1298672555}
+  - {fileID: 35626051}
 --- !u!1 &1012492296
 GameObject:
   m_ObjectHideFlags: 0

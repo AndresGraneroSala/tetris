@@ -70,12 +70,16 @@ public class LogicSpawner : MonoBehaviour
             return;
         }
 
+        tetronim.GetComponent<LogicTetronim>().TryDestroyGhost();
+
+        
         if (_tetronimHolded != null)
         {
             _tetronimHolded.transform.eulerAngles = new Vector3(0,0,0);
             
             _tetronimHolded.transform.position = transform.position;
             _tetronimHolded.GetComponent<LogicTetronim>().enabled = true;
+            _tetronimHolded.GetComponent<LogicTetronim>().SetGhostInGrid();
 
             
             tetronim.GetComponent<LogicTetronim>().UpdateRotationChilds();
