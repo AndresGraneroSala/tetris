@@ -9,7 +9,7 @@ public class LogicTetronim : MonoBehaviour
 {
 
     [SerializeField] private float timeBefore, 
-        timeDown = 50.8f;
+        timeDown = 1.25f;
 
     public static int heightGrid = 20, widthGrid=10;
 
@@ -18,7 +18,7 @@ public class LogicTetronim : MonoBehaviour
     private static Transform[,] grid = new Transform[widthGrid,heightGrid];
 
     public static int score=0;
-    public static int level=0;
+    public static int level=1;
 
     [FormerlySerializedAs("name")] public string nameTetronim;
 
@@ -224,8 +224,8 @@ public class LogicTetronim : MonoBehaviour
             }
         }
 
-        score += 100;
-        Debug.Log(score);
+        score += 100*(level);
+        //Debug.Log(score);
         
         return true;
     }
@@ -261,13 +261,41 @@ public class LogicTetronim : MonoBehaviour
     {
         switch (score)
         {
-            case 200: level = 1;
+            
+            case >=25000:
+                level = 9;
                 break;
             
-            case 400: level = 4;
+            case >=15000:
+                level = 8;
                 break;
             
-           
+            case >=10000:
+                level = 7;
+                break;
+            
+            case >=5000:
+                level = 6;
+                break;
+
+            case >=2600:
+                level = 5;
+                break;
+
+            case >=2000:
+                level = 4;
+                break;
+
+            case >=1000:
+                level = 3;
+                break;
+
+            case >=500:
+                level = 2;
+                break;
+            case 0: level = 1;
+                break;
+            
         }
 
         GameObject.Find("ScoreNum").GetComponent<Text>().text = score.ToString();
@@ -278,10 +306,23 @@ public class LogicTetronim : MonoBehaviour
     {
         switch (level)
         {
-            case 1: timeDown = 0.4f;
+            case 2: timeDown = 1f;
                 break;
-            case 2: timeDown = 0.2f;
+            case 3: timeDown = 0.9f;
                 break;
+            case 4: timeDown = 0.8f;
+                break;
+            case 5: timeDown = 0.7f;
+                break;
+            case 6: timeDown = 0.65f;
+                break;
+            case 7: timeDown = 0.6f;
+                break;
+            case 8: timeDown = 0.55f;
+                break;
+            case 9: timeDown = 0.5f;
+                break;
+            
         }
         
         GameObject.Find("LevelNum").GetComponent<Text>().text = level.ToString();
@@ -300,7 +341,7 @@ public class LogicTetronim : MonoBehaviour
     public void SetGhostInGrid()
     {
     
-        print("set ghost");
+        //print("set ghost");
         
         TryDestroyGhost();
 
