@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -347,6 +348,19 @@ public class LogicTetronim : MonoBehaviour
 
         ghostPiece = Instantiate(gameObject);
         ghostPiece.GetComponent<LogicTetronim>().enabled = false;
+
+        ghostPiece.transform.position += new Vector3(0,-1,0);
+
+        /*switch (nameTetronim)
+        {
+            case "I":
+                ghostPiece.transform.position += new Vector3(0,-1,0);
+                break;
+            case "J":
+            case "L":
+                ghostPiece.transform.position += new Vector3(0,-1,0);
+                break;
+        }*/
         
         while (ghostPiece.GetComponent<LogicTetronim>().Limits())
         {
@@ -357,6 +371,7 @@ public class LogicTetronim : MonoBehaviour
         foreach (Transform child in ghostPiece.transform)
         {
             child.GetComponent<SpriteRenderer>().sprite = spriteGhostPiece;
+            child.GetComponent<SpriteRenderer>().sortingOrder -= 1;
         }
         
     }

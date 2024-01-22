@@ -45,8 +45,13 @@ public class LogicSpawner : MonoBehaviour
     public void NewTetronim()
     {
         GameObject tetronim = GenerateTetronim();
+        
+        tetronimNext[0].transform.rotation = Quaternion.Euler(0,0,0);
+        
+        
         tetronimNext[0].transform.position = transform.position;
         tetronimNext[0].GetComponent<LogicTetronim>().enabled = true;
+        tetronimNext[0].GetComponent<LogicTetronim>().UpdateRotationChilds();
         
         for (int i = 1; i < tetronimNext.Length; i++)
         {
