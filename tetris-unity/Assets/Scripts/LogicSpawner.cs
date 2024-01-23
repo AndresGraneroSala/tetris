@@ -20,7 +20,9 @@ public class LogicSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        /*QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;*/
+        
         tetronimNext = new GameObject[boxNext.Length];
 
         for (int i = 0; i < tetronimNext.Length; i++)

@@ -127,7 +127,7 @@ public class LogicTetronim : MonoBehaviour
             
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && !Input.GetKeyDown(KeyCode.Space))
         {
             FindObjectOfType<LogicSpawner>().HoldTetronim(gameObject);
         }
